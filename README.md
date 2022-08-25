@@ -1,4 +1,4 @@
-![GitHub contributors](https://img.shields.io/github/contributors-anon/teilorr/discloud-apy?color=Green&label=Contribuidores&logo=github&style=for-the-badge) ![GitHub pull requests](https://img.shields.io/github/issues-pr/teilorr/discloud-apy?color=orange&logo=github&style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/teilorr/discloud-apy/total?logo=github&style=for-the-badge) ![Discloud Site](https://img.shields.io/badge/Abrir-site%20da%20DISCLOUD-informational?style=for-the-badge&logo=google)
+![GitHub contributors](https://img.shields.io/github/contributors-anon/teilorr/discloud-apy?color=Green&label=Contribuidores&logo=github&style=for-the-badge) ![GitHub pull requests](https://img.shields.io/github/issues-pr/teilorr/discloud-apy?color=orange&logo=github&style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/teilorr/discloud-apy/total?logo=github&style=for-the-badge)
 
 # Discloud APY
 Um repositório de exemplo para te guiar em como usar a API da [Discloud](https://discloudbot.com/) usando python e um bot do discord. 
@@ -11,5 +11,9 @@ O Repositório atual contém todas as depedências nescessárias num `requiremen
 pip install -r requirements.txt
 ```
 
-## Usando o bot
-Basta colocar o id, token do discord e token da discloud no arquivo `.env` localizado na root do projeto que você já pode sair por aí esbanjando a nova API da discloud!
+## Entendendo o projeto
+### Arquivos da API
+Os arquivos relacionados com a API da discloud se encontram em `discloud-apy/_discloud/`. O resto faz parte do bot pro discord
+
+### Usando o bot
+Para usar o bot, basta colocar o id, token do discord e token da discloud no arquivo `.env` localizado na root do projeto que você já pode sair por aí esbanjando a nova API da discloud!
