@@ -1,4 +1,4 @@
-![GitHub contributors](https://img.shields.io/github/contributors-anon/teilorr/discloud-apy?color=Green&label=Contribuidores&logo=github&style=for-the-badge) ![GitHub pull requests](https://img.shields.io/github/issues-pr/teilorr/discloud-apy?color=orange&logo=github&style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/teilorr/discloud-apy/total?logo=github&style=for-the-badge) ![Discloud Site](https://img.shields.io/badge/Abrir-site%20da%20DISCLOUD-informational?style=for-the-badge&logo=google)
+![GitHub contributors](https://img.shields.io/github/contributors-anon/teilorr/discloud-apy?color=Green&label=Contribuidores&logo=github&style=for-the-badge) ![GitHub pull requests](https://img.shields.io/github/issues-pr/teilorr/discloud-apy?color=orange&logo=github&style=for-the-badge) ![GitHub all releases](https://img.shields.io/github/downloads/teilorr/discloud-apy/total?logo=github&style=for-the-badge)
 
 # Discloud APY
 Um repositório de exemplo para te guiar em como usar a API da [Discloud](https://discloudbot.com/) usando python e um bot do discord. 
