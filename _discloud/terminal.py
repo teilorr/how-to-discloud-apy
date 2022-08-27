@@ -1,6 +1,9 @@
 from __future__ import annotations
+from typing import (
+    Optional
+)
 
-import asyncio
+from utils.route import Route
 import aiohttp
 
 class Terminal:
@@ -12,29 +15,15 @@ class Terminal:
 
         self.app_id = app_id
         self.api_token = discloud_token
-        self.__loop = asyncio.get_event_loop()
 
-    def __del__(self) -> None:
-        if not self.__loop.is_closed():
-            self.__loop.close()
-
-    def __str__(self) -> str:
-        return self.content
-
-    async def __fetch(self, /, *, app_id: int) -> dict:
-        async with aiohttp.ClientSession() as ses:
-            async with ses.request("GET", f"https://api.discloud.app/v2/app/{app_id}/logs", headers={"api-token": self.api_token}) as response:
+    async def __request(self, route: Route) -> dict:
+        async with aiohttp.ClientSession() as ses: 
+            async with ses.request(
+                        method=route.method, 
+                        url=route.url, 
+                        headers={"api-token": self.api_token}
+                    ) as response:
                 return await response.json()
 
-    def fetch_full(self) -> dict:
-        return self.__loop.run_until_complete(self.__fetch(app_id=self.app_id))
-
-    def fetch_small(self) -> str:
-        return self.fetch_full()["apps"]["terminal"]["small"]
-
-    def fetch_big(self) -> str:
-        return self.fetch_full()["apps"]["terminal"]["big"]
-
-    @property
-    def content(self):
-        return self.fetch_small()
+    async def fetch_full(self, to: Optional[int]=None) -> dict:
+        return await self.__request(Route("GET", "/app/{app_id}/logs", app_id=to or self.app_id))

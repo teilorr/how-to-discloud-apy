@@ -1,43 +1,38 @@
 from __future__ import annotations
+from typing import Optional
 
 from _discloud import (
     Terminal, 
-    Backup, 
     ApplicationManager
 )
 
-class DiscloudBot:
-    def __init__(self, /, *, discloud_token: str, bot_id: int) -> None:
-        if not isinstance(bot_id, int):
+from discord.ext import commands
+
+class Discloud:
+    def __init__(self, /, *, discloud_token: str, bot: commands.Bot) -> None:
+        if not isinstance(bot, commands.Bot):
             raise ValueError(
-                f"Expected int as app_id, not {bot_id.__class__!r}"
+                f"Expected commands.Bot or subclass as bot, not {bot.__class__!r}"
             ) from None
 
+        self._bot = bot
         self._terminal = Terminal(
             discloud_token=discloud_token,
-            app_id=bot_id
-        )
-        self._backup = Backup(
-            discloud_token=discloud_token,
-            app_id=bot_id
+            app_id=bot.user.id
         )
         self._actions = ApplicationManager(
             discloud_token=discloud_token,
-            app_id=bot_id
+            app_id=self._bot.user.id
         )
 
-    @classmethod
-    def create(cls, discloud_token: str, bot_id: int) -> DiscloudBot:
-        return cls(
-            discloud_token=discloud_token,
-            bot_id=bot_id
-        )
-
-    def restart(self) -> None:
-        self._actions.restart()
+    async def restart(self, bot_id: Optional[int]=None) -> None:
+        await self._actions.restart(bot_id=bot_id)
     
-    def logs(self) -> str:
-        return self._terminal.fetch_small()
+    async def raw_backup(self, to: Optional[int]=None) -> dict:
+        return await self._actions.generate_backup(to=to)
 
-    def get_backup(self) -> str:
-        return self._backup.download_url
+    async def raw_app_status(self, to: Optional[int]=None) -> dict:
+        return await self._actions.get_raw_status(to=to)
+
+    async def raw_logs(self, to: Optional[str]=None) -> dict:
+        return await self._terminal.fetch_full(to=to)

@@ -1,6 +1,7 @@
 from __future__ import annotations
+from typing import Optional
 
-import asyncio
+from utils.route import Route
 import aiohttp
 
 class ApplicationManager:
@@ -12,30 +13,24 @@ class ApplicationManager:
 
         self.app_id = app_id
         self.api_token = discloud_token
-        self.__loop = asyncio.get_event_loop()
 
-    def __del__(self) -> None:
-        if not self.__loop.is_closed():
-            self.__loop.close()
+    async def __request(self, route: Route) -> dict:
+        async with aiohttp.ClientSession() as ses: 
+            async with ses.request(
+                        method=route.method, 
+                        url=route.url, 
+                        headers={"api-token": self.api_token}
+                    ) as response:
+                return await response.json()
 
-    async def __restart(self, /, *, app_id: int) -> dict:
-        async with aiohttp.ClientSession() as ses:
-            await ses.request(
-                method="PUT", 
-                url=f"https://api.discloud.app/v2/app/{app_id}/restart", 
-                headers={"api-token": self.api_token}
-            )
+    async def generate_backup(self, to: Optional[int]=None) -> dict:
+        return await self.__request(Route("GET", "/app/{app_id}/backup", app_id=to or self.app_id))
 
-    async def __stop(self, /, *, app_id: int) -> dict:
-        async with aiohttp.ClientSession() as ses:
-            await ses.request(
-                method="PUT", 
-                url=f"https://api.discloud.app/v2/app/{app_id}/stop", 
-                headers={"api-token": self.api_token}
-            )
+    async def get_raw_status(self, to: Optional[int]=None) -> dict:
+        return await self.__request(Route("GET", "/app/{app_id}/status", app_id=to or self.app_id))
 
-    def restart(self) -> None:
-        self.__loop.run_until_complete(self.__restart(app_id=self.app_id))
+    async def restart(self, bot_id: Optional[int]=None) -> None:
+        return await self.__request(Route("PUT", "/app/{app_id}/restart", app_id=bot_id or self.app_id))
 
-    def stop(self) -> None:
-        self.__loop.run_until_complete(self.__stop(app_id=self.app_id))
+    async def stop(self, bot_id: Optional[int]=None) -> None:
+        return await self.__request(Route("PUT", "/app/{app_id}/stop", app_id=bot_id or self.app_id))

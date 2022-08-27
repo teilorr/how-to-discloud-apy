@@ -13,10 +13,6 @@ class DotEnv:
         self._path_env_file = env_file
 
     @classmethod
-    def with_custom_file(cls, new_file: str) -> DotEnv:
-        return cls(env_file=new_file)
-
-    @classmethod
     def get(cls, var_name: str) -> Any:
         find_numbers_regex = r"^-?\d+(\d+)$"
 
