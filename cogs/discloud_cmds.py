@@ -7,7 +7,6 @@ from typing import (
 from dateutil import parser as dateutil_parser
 from discord.ext import commands
 from discord import app_commands
-from utils import is_number
 import discord
 
 if TYPE_CHECKING:
@@ -19,9 +18,7 @@ class DiscloudCommands(commands.Cog, name="Comandos da Discloud"):
 
     @app_commands.command(name="terminal", description="Mostra o terminal da aplicação")
     async def show_terminal(self, interaction: discord.Interaction, app_id: Optional[str]=None) -> None:
-        if not is_number(app_id):
-            return
-        app_id = int(app_id.strip())
+        app_id = int(app_id.strip()) if app_id.isdigit() else None
 
         logs = await self.bot.discloud.raw_logs(to=app_id)
         if logs["status"] == "error":
@@ -41,11 +38,8 @@ class DiscloudCommands(commands.Cog, name="Comandos da Discloud"):
 
     @app_commands.command(name="backup", description="Gera um link pro backup da sua aplicação")
     async def show_backup(self, interaction: discord.Interaction, app_id: Optional[str]=None) -> None:
-        if not is_number(app_id):
-            return
-        app_id = int(app_id.strip())
-
         await interaction.response.defer()
+        app_id = int(app_id.strip()) if app_id.isdigit() else None
  
         bkcup_raw = await self.bot.discloud.raw_backup(to=app_id)
         if bkcup_raw["status"] == "error":
@@ -65,9 +59,7 @@ class DiscloudCommands(commands.Cog, name="Comandos da Discloud"):
 
     @app_commands.command(name="status", description="Mostra informações sobre seu bot na discloud")
     async def show_status(self, interaction: discord.Interaction, app_id: Optional[str]=None) -> None:
-        if not is_number(app_id):
-            return
-        app_id = int(app_id.strip())
+        app_id = int(app_id.strip()) if app_id.isdigit() else None
 
         raw_status = await self.bot.discloud.raw_app_status(to=app_id)
         if raw_status["status"] == "error":
